@@ -21,11 +21,20 @@ def _process_message(message, customer_name, tutor_first_name, tutor_last_initia
         f"{tutor_first_name} {tutor_last_initial} (Tutor)"
     ]:
         message = message.replace(text_to_remove, "")
-    return (
-        message.replace(customer_name[0] + " " + tutor_first_name[0], "")
-        .replace(customer_name[0] + " " + customer_name, "")
-        .strip()
+
+    message = message.replace(
+        customer_name[0] if len(customer_name) > 0 else "" + " " + tutor_first_name[0],
+        "",
     )
+
+    if len(customer_name) > 0:
+        message = message.replace(
+            customer_name[0] if len(customer_name) > 0 else "" + " " + customer_name, ""
+        )
+
+    message = message.strip()
+
+    return message
 
 
 def parse_public_chat(
@@ -40,7 +49,9 @@ def parse_public_chat(
     customer = _parse_customer_name_from_first_message(stripped_matches)
     processed_matches = []
     for sm in stripped_matches:
-        processed_matches.append(_process_message(sm, customer, tutor_first_name, tutor_last_initial))  # type: ignore
+        processed_matches.append(
+            _process_message(sm, customer, tutor_first_name, tutor_last_initial)
+        )
 
     public_chat_messages: list[PublicChatMessage] = []
     for sm in processed_matches:
@@ -62,7 +73,7 @@ def parse_public_chat(
         else:
             public_chat_messages[-1]["content"] += (
                 " ".join(sm.split())
-                .strip(customer[0])  # type: ignore
+                .strip(customer[0] if len(customer) > 0 else "")  # type: ignore
                 .strip()
                 .strip(tutor_first_name[0])
                 .strip()
