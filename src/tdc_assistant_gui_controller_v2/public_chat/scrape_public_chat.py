@@ -4,6 +4,7 @@ from time import sleep
 from pywinauto import mouse  # type: ignore
 
 from .parse_public_chat import parse_public_chat
+from .types import PublicChat
 
 from ..windows import WindowTitle, get_all_windows
 from ..controls import (
@@ -37,7 +38,7 @@ def scrape_public_chat_raw_text(control: Any) -> str:
     return result
 
 
-def scrape_public_chat(tutor_first_name: str, tutor_last_initial: str):
+def scrape_public_chat(tutor_first_name: str, tutor_last_initial: str) -> PublicChat:
     windows_before_clicks = get_all_windows()
 
     public_chat_window = None
@@ -67,11 +68,14 @@ def scrape_public_chat(tutor_first_name: str, tutor_last_initial: str):
     if public_chat_window is None:
         raise Exception(f"Cannot find window: '{WindowTitle.PUBLIC_CHAT.value}")
 
-    result = parse_public_chat(
-        scrape_public_chat_raw_text(public_chat_window),
+    raw_text = scrape_public_chat_raw_text(public_chat_window)
+
+    messages = parse_public_chat(
+        raw_text,
         tutor_first_name,
         tutor_last_initial,
     )
 
     public_chat_window.close()
-    return result
+
+    return {"messages": messages, "raw_text": raw_text}
