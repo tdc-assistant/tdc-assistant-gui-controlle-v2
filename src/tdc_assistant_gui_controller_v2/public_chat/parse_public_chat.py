@@ -53,11 +53,11 @@ def parse_public_chat(
             _process_message(sm, customer, tutor_first_name, tutor_last_initial)
         )
 
-    public_chat_messages: list[PublicChatMessage] = []
+    messages: list[PublicChatMessage] = []
     for sm in processed_matches:
         if sm in [customer, "(Tutor)"]:
             is_customer = sm == customer
-            public_chat_messages.append(
+            messages.append(
                 {
                     "participant": {
                         "name": sm if is_customer else tutor_first_name,
@@ -66,12 +66,12 @@ def parse_public_chat(
                     "content": "",
                 }
             )
-        elif len(public_chat_messages) == 0:
+        elif len(messages) == 0:
             continue
         elif pattern_timestamp.match(sm):
             continue
         else:
-            public_chat_messages[-1]["content"] += (
+            messages[-1]["content"] += (
                 " ".join(sm.split())
                 .strip(customer[0] if len(customer) > 0 else "")  # type: ignore
                 .strip()
@@ -79,4 +79,4 @@ def parse_public_chat(
                 .strip()
             )
 
-    return public_chat_messages
+    return messages
