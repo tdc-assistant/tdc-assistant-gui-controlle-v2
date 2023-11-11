@@ -1,6 +1,6 @@
 from typing import TypedDict
 
-from .public_chat import scrape_public_chat, PublicChatMessage
+from .public_chat import scrape_public_chat, PublicChat
 
 
 class TutorProfile(TypedDict):
@@ -18,7 +18,7 @@ class TdcAssistantGuiControllerV2:
     def __init__(self, options: ControllerOptions):
         self._options = options
 
-    def scrape_public_chat(self) -> list[PublicChatMessage]:
+    def scrape_public_chat(self) -> PublicChat:
         tutor_profile = self._options["tutor_profile"]
         return scrape_public_chat(
             tutor_first_name=tutor_profile["first_name"],
