@@ -1,3 +1,3 @@
 from typing import Literal, Union
 
-ParticipantType = Union[Literal["tutor"], Literal["student"]]
+ParticipantType = Union[Literal["tutor"], Literal["student"], Literal["classroom"]]

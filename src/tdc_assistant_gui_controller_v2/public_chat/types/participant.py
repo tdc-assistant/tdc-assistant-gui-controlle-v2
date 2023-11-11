@@ -1,8 +1,8 @@
-from typing import TypedDict
+from typing import TypedDict, Optional
 
 from .participant_type import ParticipantType
 
 
 class Participant(TypedDict):
     type: ParticipantType
-    name: str
+    name: Optional[str]
