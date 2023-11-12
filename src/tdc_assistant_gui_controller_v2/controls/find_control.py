@@ -15,7 +15,7 @@ def find_control_by_property(
 
     props = control.get_properties()
     if props.get(prop_key.value) == prop_value.value:
-        return f(props)
+        return f(control)
 
     for d in control.descendants():
         found = find_control_by_property(d, prop_key, prop_value, f)
