@@ -3,6 +3,7 @@ from typing import TypedDict
 from .public_chat import scrape_public_chat, PublicChat
 from .types import Coordinate
 from .send_message import Message, send_message
+from .insert_code_editor import insert_code_editor
 
 
 class TutorProfile(TypedDict):
@@ -13,6 +14,7 @@ class TutorProfile(TypedDict):
 class ComponentCoordinates(TypedDict):
     public_chat_text_area: Coordinate
     public_chat_pop_out: Coordinate
+    insert_code_editor_coord_path: tuple[Coordinate, Coordinate, Coordinate, Coordinate]
 
 
 class ControllerOptions(TypedDict):
@@ -38,3 +40,6 @@ class TdcAssistantGuiControllerV2:
 
     def send_message(self, message: Message):
         send_message(message, self._options["coords"]["public_chat_text_area"])
+
+    def insert_code_editor(self):
+        insert_code_editor(self._options["coords"]["insert_code_editor_coord_path"])
