@@ -19,6 +19,7 @@ class ComponentCoordinates(TypedDict):
     public_chat_text_area: Coordinate
     public_chat_pop_out: Coordinate
     insert_code_editor_coord_path: tuple[Coordinate, Coordinate, Coordinate, Coordinate]
+    public_chat_button_coords: Coordinate
 
 
 class ControllerOptions(TypedDict):
@@ -40,6 +41,9 @@ class TdcAssistantGuiControllerV2:
             tutor_last_initial=tutor_profile["last_initial"],
             chat_log_pop_out_button_coords=self._options["coords"][
                 "public_chat_pop_out"
+            ],
+            public_chat_button_coords=self._options["coords"][
+                "public_chat_button_coords"
             ],
         )
 

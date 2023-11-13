@@ -1,5 +1,9 @@
 from typing import Any
 
+from time import sleep
+
+from pywinauto import mouse  # type: ignore
+
 from .parse_public_chat import parse_public_chat
 from .types import PublicChat
 
@@ -35,7 +39,10 @@ def scrape_public_chat(
     tutor_first_name: str,
     tutor_last_initial: str,
     chat_log_pop_out_button_coords: Coordinate,
+    public_chat_button_coords: Coordinate,
 ) -> PublicChat:
+    mouse.click(coords=(public_chat_button_coords["x"], public_chat_button_coords["y"]))
+    sleep(0.5)
     public_chat_window = get_window_by_title(
         WindowTitle.PUBLIC_CHAT, chat_log_pop_out_button_coords
     )
