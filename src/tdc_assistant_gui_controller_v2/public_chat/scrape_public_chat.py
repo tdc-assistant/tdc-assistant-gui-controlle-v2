@@ -41,7 +41,10 @@ def scrape_public_chat(
     chat_log_pop_out_button_coords: Coordinate,
     public_chat_button_coords: Coordinate,
 ) -> PublicChat:
-    mouse.click(coords=(public_chat_button_coords["x"], public_chat_button_coords["y"]))
+    coords = (public_chat_button_coords["x"], public_chat_button_coords["y"])
+    mouse.move(coords=coords)
+    sleep(0.5)
+    mouse.click(coords=coords)
     sleep(0.5)
     public_chat_window = get_window_by_title(
         WindowTitle.PUBLIC_CHAT, chat_log_pop_out_button_coords
