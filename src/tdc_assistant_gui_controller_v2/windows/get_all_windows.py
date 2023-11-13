@@ -4,10 +4,19 @@ from pywinauto import Desktop  # type: ignore
 from .enums import WindowTitle
 
 
-def get_all_windows(window_title: Optional[WindowTitle] = None):
+def get_all_windows(window_titles: Optional[list[WindowTitle]] = None):
     windows = Desktop(backend="uia").windows()
 
-    if window_title is None:
+    if window_titles is None:
         return windows
 
-    return [w for w in windows if window_title.value in w.window_text()]
+    result = []
+
+    for w in windows:
+        for t in window_titles:
+            if t.value in w.window_text():
+                result.append(w)
+                break
+
+    return result
+

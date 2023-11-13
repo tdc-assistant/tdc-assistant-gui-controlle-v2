@@ -1,9 +1,13 @@
 from typing import TypedDict
 
+from tdc_assistant_gui_controller_v2.scrape_editors.scrape_editors import Editor
+
 from .public_chat import scrape_public_chat, PublicChat
 from .types import Coordinate
 from .send_message import Message, send_message
 from .insert_code_editor import insert_code_editor
+from .scrape_editors import ScrapeEditorConfig
+from tdc_assistant_gui_controller_v2.scrape_editors import scrape_editors
 
 
 class TutorProfile(TypedDict):
@@ -20,6 +24,7 @@ class ComponentCoordinates(TypedDict):
 class ControllerOptions(TypedDict):
     tutor_profile: TutorProfile
     coords: ComponentCoordinates
+    scraped_editor_config: ScrapeEditorConfig
 
 
 class TdcAssistantGuiControllerV2:
@@ -43,3 +48,6 @@ class TdcAssistantGuiControllerV2:
 
     def insert_code_editor(self):
         insert_code_editor(self._options["coords"]["insert_code_editor_coord_path"])
+
+    def scrape_editor(self, editor_cache: list[Editor]) -> list[Editor]:
+        return scrape_editors(self._options["scraped_editor_config"], editor_cache)
