@@ -60,6 +60,16 @@ def scrape_editors(
             mouse.click(coords=(x + i * POP_OUT_BUTTON_TRIES_STEP_SIZE, y))
             sleep(1)
 
+            mouse.click(coords=config["text_editor_coords"])
+            clipboard.EmptyClipboard()
+            keyboard.send_keys("^a^c")
+            try:
+                content = clipboard.GetData(clipboard.win32clipboard.CF_UNICODETEXT)  # type: ignore
+            except:
+                content = ""
+
+            editor["content"] = content
+
             windows = get_all_windows(editor_names)
             for window in windows:
                 # TODO Scrape content here and update editor here
@@ -112,7 +122,7 @@ def scrape_editors(
 
             if len(windows) > 1:
                 raise Exception(
-                    f"Failed to close windows: '{','.join([w.window_text() for w in windows ])}'"
+                    f"Failed to close windows: '{', '.join([w.window_text() for w in windows ])}'"
                 )
             elif len(windows) == 1:
                 window = windows[0]
