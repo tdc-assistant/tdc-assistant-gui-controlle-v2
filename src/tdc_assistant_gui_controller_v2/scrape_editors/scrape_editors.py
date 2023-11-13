@@ -13,6 +13,9 @@ class Editor(TypedDict):
     content: str
 
 
+EditorCache = list[Editor]
+
+
 class ScrapeEditorConfig(TypedDict):
     coords_left: tuple[int, int]
     coords_right: tuple[int, int]
@@ -46,9 +49,7 @@ POP_OUT_BUTTON_TRIES_STEP_SIZE = 10
 MAX_DUPLICATE = 4
 
 
-def scrape_editors(
-    config: ScrapeEditorConfig, editor_cache: list[Editor]
-) -> list[Editor]:
+def scrape_editors(config: ScrapeEditorConfig, editor_cache: EditorCache):
     # Search known buttons first
     for editor in editor_cache:
         mouse.move(coords=editor["button_coords"])
@@ -177,5 +178,3 @@ def scrape_editors(
             x = config["coords_left"][0]
             print("incrementing y")
             y += BUTTON_SCAN_STEP_SIZE_VERTICAL
-
-    return editor_cache
