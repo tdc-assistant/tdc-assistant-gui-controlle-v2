@@ -32,6 +32,7 @@ class TdcAssistantGuiControllerV2:
 
     def __init__(self, options: ControllerOptions):
         self._options = options
+        self._editor_cache = []
 
     def scrape_public_chat(self) -> PublicChat:
         tutor_profile = self._options["tutor_profile"]
