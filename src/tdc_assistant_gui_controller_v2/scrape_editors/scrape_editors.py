@@ -130,7 +130,10 @@ def scrape_editors(config: ScrapeEditorConfig, editor_cache: EditorCache):
                 editor_name = window.window_text()
                 editor_cache_names = [editor["name"] for editor in editor_cache]
 
-                if editor_name not in editor_cache_names:
+                if (
+                    editor_name not in editor_cache_names
+                    and editor_name != WindowTitle.WHITEBOARD
+                ):
                     mouse.click(coords=config["text_editor_coords"])
                     clipboard.EmptyClipboard()
                     keyboard.send_keys("^a^c")
@@ -176,5 +179,4 @@ def scrape_editors(config: ScrapeEditorConfig, editor_cache: EditorCache):
 
         if x > config["coords_right"][0]:
             x = config["coords_left"][0]
-            print("incrementing y")
             y += BUTTON_SCAN_STEP_SIZE_VERTICAL
