@@ -20,5 +20,6 @@ class WindowTitle(Enum):
     PYTHON_EDITOR = "Python Editor"
     R_EDITOR = "R Editor"
     RUBY_EDITOR = "Ruby Editor"
+    SCREENSHARE = "Screenshare"
     SQL_EDITOR = "SQL Editor"
     XML_EDITOR = "XML Editor"
