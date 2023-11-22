@@ -25,6 +25,7 @@ default_window_titles: Final[list[WindowTitle]] = [
     WindowTitle.RUBY_EDITOR,
     WindowTitle.SQL_EDITOR,
     WindowTitle.XML_EDITOR,
+    WindowTitle.SCREENSHARE,
 ]
 
 

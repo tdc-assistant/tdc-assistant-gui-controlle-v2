@@ -1,4 +1,4 @@
-from typing import TypedDict
+from typing import Optional, TypedDict
 
 from .public_chat import PublicChat
 from .types import Coordinate
@@ -7,6 +7,7 @@ from .insert_code_editor import insert_code_editor
 from .scrape_editors import ScrapeEditorConfig
 from .windows import WindowManager
 from .code_editor import CodeEditor
+from .types import AWSCredentials, Screenshare
 
 
 class TutorProfile(TypedDict):
@@ -25,6 +26,7 @@ class ControllerOptions(TypedDict):
     tutor_profile: TutorProfile
     coords: ComponentCoordinates
     scraped_editor_config: ScrapeEditorConfig
+    aws_credentials: AWSCredentials
 
 
 class TdcAssistantGuiControllerV2:
@@ -40,6 +42,7 @@ class TdcAssistantGuiControllerV2:
             ],
             tutor_first_name=self._options["tutor_profile"]["first_name"],
             tutor_last_initial=self._options["tutor_profile"]["last_initial"],
+            aws_credentials=self._options["aws_credentials"],
         )
 
     def scrape_public_chat(self) -> PublicChat:
@@ -53,3 +56,6 @@ class TdcAssistantGuiControllerV2:
 
     def scrape_editor(self) -> list[CodeEditor]:
         return self._window_manager.scrape_code_editors()
+
+    def scrape_screenshare(self) -> Optional[Screenshare]:
+        return self._window_manager.scrape_screenshare()
