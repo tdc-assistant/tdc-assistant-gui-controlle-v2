@@ -3,17 +3,20 @@ from typing import Any, Union, Optional
 from tdc_assistant_gui_controller_v2.code_editor.types.code_editor import CodeEditor
 
 from ..logger import Logger
-from ..types import Coordinate
+from ..types import Coordinate, AWSCredentials, Screenshare
 from ..public_chat import PublicChat
 
 from .open_all_windows import open_all_windows
 from .public_chat_window_controller import PublicChatWindowController
 from .code_editor_window_controller import CodeEditorWindowController
+from .screenshare_window_controller import ScreenshareWindowController
 
 
 from ..types import WindowTitle
 
-WindowController = Union[PublicChatWindowController, CodeEditorWindowController]
+WindowController = Union[
+    PublicChatWindowController, CodeEditorWindowController, ScreenshareWindowController
+]
 
 code_editor_window_titles = [
     WindowTitle.C_LIKE_EDITOR,
@@ -27,7 +30,6 @@ code_editor_window_titles = [
     WindowTitle.PYTHON_EDITOR,
     WindowTitle.R_EDITOR,
     WindowTitle.RUBY_EDITOR,
-    WindowTitle.SCREENSHARE,
     WindowTitle.SQL_EDITOR,
     WindowTitle.XML_EDITOR,
 ]
@@ -38,16 +40,19 @@ class WindowManager:
     _public_chat_text_box_coords: Coordinate
     _tutor_first_name: str
     _tutor_last_initial: str
+    _aws_credentials: AWSCredentials
     _window_controllers: list[WindowController]
     _logger: Logger
 
     def __init__(
         self,
+        aws_credentials: AWSCredentials,
         right_pop_out_button_coords: Coordinate,
         public_chat_text_box_coords: Coordinate,
         tutor_first_name: str,
         tutor_last_initial: str,
     ):
+        self._aws_credentials = aws_credentials
         self._right_pop_out_button_coords = right_pop_out_button_coords
         self._public_chat_text_box_coords = public_chat_text_box_coords
         self._tutor_first_name = tutor_first_name
@@ -102,7 +107,8 @@ class WindowManager:
                 return CodeEditorWindowController(
                     window, programming_language, editor_number
                 )
-
+        if WindowTitle.SCREENSHARE.value.lower() in window_text.lower():
+            return ScreenshareWindowController(window, self._aws_credentials)
         return None
 
     def find_public_chat_window_controller(
@@ -112,6 +118,17 @@ class WindowManager:
 
         for controller in self._window_controllers:
             if isinstance(controller, PublicChatWindowController):
+                return controller
+
+        return None
+
+    def find_screenshare_window_controller(
+        self,
+    ) -> Optional[ScreenshareWindowController]:
+        self.open_all_windows()
+
+        for controller in self._window_controllers:
+            if isinstance(controller, ScreenshareWindowController):
                 return controller
 
         return None
@@ -148,3 +165,12 @@ class WindowManager:
                 self._public_chat_text_box_coords["y"],
             ),
         )
+
+    def scrape_screenshare(self) -> Optional[Screenshare]:
+        controller = self.find_screenshare_window_controller()
+
+        if controller is None:
+            print("cannot find screenshare window")
+            return None
+
+        return controller.scrape()
