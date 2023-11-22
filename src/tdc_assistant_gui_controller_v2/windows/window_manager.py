@@ -11,7 +11,7 @@ from .public_chat_window_controller import PublicChatWindowController
 from .code_editor_window_controller import CodeEditorWindowController
 
 
-from .enums import WindowTitle
+from ..types import WindowTitle
 
 WindowController = Union[PublicChatWindowController, CodeEditorWindowController]
 
@@ -35,6 +35,7 @@ code_editor_window_titles = [
 
 class WindowManager:
     _right_pop_out_button_coords: Coordinate
+    _public_chat_text_box_coords: Coordinate
     _tutor_first_name: str
     _tutor_last_initial: str
     _window_controllers: list[WindowController]
@@ -43,10 +44,12 @@ class WindowManager:
     def __init__(
         self,
         right_pop_out_button_coords: Coordinate,
+        public_chat_text_box_coords: Coordinate,
         tutor_first_name: str,
         tutor_last_initial: str,
     ):
         self._right_pop_out_button_coords = right_pop_out_button_coords
+        self._public_chat_text_box_coords = public_chat_text_box_coords
         self._tutor_first_name = tutor_first_name
         self._tutor_last_initial = tutor_last_initial
         self._window_controllers = []
@@ -67,7 +70,9 @@ class WindowManager:
                 else:
                     self._window_controllers.append(controller)
             else:
-                print(f"No controller exists for Window: '{window.window_text()}'")
+                self._logger.log_warning(
+                    f"No controller exists for Window: '{window.window_text()}'"
+                )
 
         open_all_windows_end = self._logger.log("Finished opening all windows")
         self._logger.log_elapsed_time(open_all_windows_start, open_all_windows_end)
@@ -83,13 +88,13 @@ class WindowManager:
         return programming_language, editor_number
 
     def _map_window_to_controller(self, window: Any) -> Optional[WindowController]:
-        window_text = window.window_text().lower()
-        if WindowTitle.PUBLIC_CHAT.value.lower() in window_text:
+        window_text = window.window_text()
+        if WindowTitle.PUBLIC_CHAT.value.lower() in window_text.lower():
             return PublicChatWindowController(
                 window, self._tutor_first_name, self._tutor_last_initial
             )
         for code_editor_window_title in code_editor_window_titles:
-            if code_editor_window_title.value.lower() in window_text:
+            if code_editor_window_title.value.lower() in window_text.lower():
                 (
                     programming_language,
                     editor_number,
@@ -100,14 +105,24 @@ class WindowManager:
 
         return None
 
-    def scrape_public_chat(self) -> PublicChat:
+    def find_public_chat_window_controller(
+        self,
+    ) -> Optional[PublicChatWindowController]:
         self.open_all_windows()
 
         for controller in self._window_controllers:
             if isinstance(controller, PublicChatWindowController):
-                return controller.scrape()
+                return controller
 
-        raise Exception(f"Cannot find {WindowTitle.PUBLIC_CHAT.value} window")
+        return None
+
+    def scrape_public_chat(self) -> PublicChat:
+        controller = self.find_public_chat_window_controller()
+
+        if controller is None:
+            raise Exception(f"Cannot find {WindowTitle.PUBLIC_CHAT.value} window")
+
+        return controller.scrape()
 
     def scrape_code_editors(self) -> list[CodeEditor]:
         self.open_all_windows()
@@ -119,3 +134,17 @@ class WindowManager:
                 code_editors.append(controller.scrape())
 
         return code_editors
+
+    def send_message(self, message: str):
+        controller = self.find_public_chat_window_controller()
+
+        if controller is None:
+            raise Exception(f"Cannot find {WindowTitle.PUBLIC_CHAT.value} window")
+
+        controller.send_message(
+            message,
+            (
+                self._public_chat_text_box_coords["x"],
+                self._public_chat_text_box_coords["y"],
+            ),
+        )

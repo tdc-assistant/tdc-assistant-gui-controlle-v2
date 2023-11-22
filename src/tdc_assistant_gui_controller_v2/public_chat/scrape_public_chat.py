@@ -1,20 +1,14 @@
 from typing import Any
 
-from time import sleep
-
-from pywinauto import mouse  # type: ignore
-
 from .parse_public_chat import parse_public_chat
 from .types import PublicChat
 
-from ..windows import get_window_by_title, WindowTitle
+from ..types import WindowTitle
 from ..controls import (
     ControlPropertyKey,
     ControlPropertyValue,
     find_control_by_property,
 )
-
-from ..types import Coordinate
 
 
 MAX_RETRY_COUNT = 3

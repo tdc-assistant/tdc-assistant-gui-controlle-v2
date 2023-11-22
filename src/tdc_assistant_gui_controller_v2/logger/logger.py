@@ -21,6 +21,9 @@ class Logger:
             "yellow",
         )
 
+    def _get_warning_message(self, message: str) -> str:
+        return colored("{:50s}".format(message), "red")
+
     def _get_fields(self, message: str, dt: datetime) -> list[str]:
         return [
             self._get_class_field(),
@@ -41,3 +44,6 @@ class Logger:
                 "cyan",
             ),
         )
+
+    def log_warning(self, message: str):
+        print(" ".join([self._get_class_field(), self._get_warning_message(message)]))

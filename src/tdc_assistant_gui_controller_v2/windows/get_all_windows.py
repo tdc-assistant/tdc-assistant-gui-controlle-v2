@@ -1,7 +1,7 @@
 from typing import Final
 from pywinauto import Desktop  # type: ignore
 
-from .enums import WindowTitle
+from ..types import WindowTitle
 
 
 default_window_titles: Final[list[WindowTitle]] = [
