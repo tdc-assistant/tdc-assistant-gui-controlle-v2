@@ -1,11 +1,12 @@
 from typing import TypedDict
 
-from .public_chat import scrape_public_chat, PublicChat
+from .public_chat import PublicChat
 from .types import Coordinate
 from .send_message import Message, send_message
 from .insert_code_editor import insert_code_editor
 from .scrape_editors import ScrapeEditorConfig
-from .scrape_editors import scrape_editors, EditorCache
+from .windows import WindowManager
+from .code_editor import CodeEditor
 
 
 class TutorProfile(TypedDict):
@@ -28,31 +29,27 @@ class ControllerOptions(TypedDict):
 
 class TdcAssistantGuiControllerV2:
     _options: ControllerOptions
-    _editor_cache: EditorCache
+    _window_manager: WindowManager
 
     def __init__(self, options: ControllerOptions):
         self._options = options
-        self._editor_cache = []
-
-    def scrape_public_chat(self) -> PublicChat:
-        tutor_profile = self._options["tutor_profile"]
-        return scrape_public_chat(
-            tutor_first_name=tutor_profile["first_name"],
-            tutor_last_initial=tutor_profile["last_initial"],
-            chat_log_pop_out_button_coords=self._options["coords"][
-                "public_chat_pop_out"
+        self._window_manager = WindowManager(
+            right_pop_out_button_coords=self._options["coords"]["public_chat_pop_out"],
+            public_chat_text_box_coords=self._options["coords"][
+                "public_chat_text_area"
             ],
-            public_chat_button_coords=self._options["coords"][
-                "public_chat_button_coords"
-            ],
+            tutor_first_name=self._options["tutor_profile"]["first_name"],
+            tutor_last_initial=self._options["tutor_profile"]["last_initial"],
         )
 
-    def send_message(self, message: Message):
-        send_message(message, self._options["coords"]["public_chat_text_area"])
+    def scrape_public_chat(self) -> PublicChat:
+        return self._window_manager.scrape_public_chat()
+
+    def send_message(self, message: str):
+        self._window_manager.send_message(message)
 
     def insert_code_editor(self):
         insert_code_editor(self._options["coords"]["insert_code_editor_coord_path"])
 
-    def scrape_editor(self) -> EditorCache:
-        scrape_editors(self._options["scraped_editor_config"], self._editor_cache)
-        return self._editor_cache
+    def scrape_editor(self) -> list[CodeEditor]:
+        return self._window_manager.scrape_code_editors()

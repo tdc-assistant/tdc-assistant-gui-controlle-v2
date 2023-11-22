@@ -4,9 +4,8 @@ from pywinauto import mouse  # type: ignore
 
 from .get_all_windows import get_all_windows
 
-from ..windows import WindowTitle, get_all_windows
 from ..controls import ControlPropertyKey
-from ..types import Coordinate
+from ..types import Coordinate, WindowTitle
 
 from ..constants import (
     GUI_EVENT_DELAY_BASE_IN_SECONDS,
