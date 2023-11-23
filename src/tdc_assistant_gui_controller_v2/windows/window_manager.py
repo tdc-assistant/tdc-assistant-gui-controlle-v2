@@ -133,6 +133,21 @@ class WindowManager:
 
         return None
 
+    def find_code_editor_window_controller(
+        self, editor_language: str, editor_number: int
+    ) -> Optional[CodeEditorWindowController]:
+        self.open_all_windows()
+
+        for controller in self._window_controllers:
+            if isinstance(controller, CodeEditorWindowController):
+                if (
+                    editor_language == controller._programming_language
+                    and editor_number == controller._editor_number
+                ):
+                    return controller
+
+        return None
+
     def scrape_public_chat(self) -> PublicChat:
         controller = self.find_public_chat_window_controller()
 
@@ -177,3 +192,13 @@ class WindowManager:
 
     def is_screenshare_window_open(self) -> bool:
         return self.find_screenshare_window_controller() is not None
+
+    def send_text_to_code_editor(
+        self, editor_language: str, editor_number: int, text: str
+    ):
+        optional_controller = self.find_code_editor_window_controller(
+            editor_language, editor_number
+        )
+
+        if optional_controller is not None:
+            optional_controller.send_text(text)

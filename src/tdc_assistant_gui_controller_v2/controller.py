@@ -62,3 +62,10 @@ class TdcAssistantGuiControllerV2:
 
     def is_screenshare_window_open(self) -> bool:
         return self._window_manager.is_screenshare_window_open()
+
+    def send_text_to_code_editor(
+        self, editor_language: str, editor_number: int, text: str
+    ):
+        self._window_manager.send_text_to_code_editor(
+            editor_language, editor_number, text
+        )
