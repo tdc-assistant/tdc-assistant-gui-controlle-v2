@@ -2,8 +2,11 @@ from typing import Any
 
 from time import sleep
 
+from pywinauto import keyboard  # type: ignore
+
 from ..logger import Logger
 from ..code_editor import scrape_code_editor_content, CodeEditor
+from ..utils import transform_text
 
 
 class CodeEditorWindowController:
@@ -40,3 +43,12 @@ class CodeEditorWindowController:
 
     def get_window_title(self) -> str:
         return self._window.window_text()
+
+    def send_text(self, text: str):
+        self._window.set_focus()
+        sleep(0.5)
+        self._window.maximize()
+        sleep(0.5)
+
+        keyboard.send_keys("{VK_END}")
+        keyboard.send_keys(transform_text(text))
