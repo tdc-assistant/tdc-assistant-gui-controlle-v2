@@ -66,6 +66,7 @@ class WindowManager:
             controller = self._map_window_to_controller(window)
 
             if controller is not None:
+                print(controller.get_window_title())
                 for existing_controller in self._window_controllers:
                     if (
                         existing_controller.get_window_title()
@@ -86,7 +87,7 @@ class WindowManager:
         self, window_title: str
     ) -> tuple[str, int]:
         editor_index = window_title.index("Editor")
-        programming_language = window_title[:editor_index]
+        programming_language = window_title[:editor_index].strip()
         editor_number = int(
             window_title[editor_index + len("Editor") :].split()[0].strip()
         )
@@ -196,9 +197,15 @@ class WindowManager:
     def send_text_to_code_editor(
         self, editor_language: str, editor_number: int, text: str
     ):
+        start = self._logger.log("Started finding code editor window controller")
         optional_controller = self.find_code_editor_window_controller(
             editor_language, editor_number
         )
+        end = self._logger.log("Finished finding code editor window controller")
+        self._logger.log_elapsed_time(start, end)
 
-        if optional_controller is not None:
-            optional_controller.send_text(text)
+        if optional_controller is None:
+            self._logger.log_warning("Cannot find code editor window controller")
+            return None
+
+        optional_controller.send_text(text)

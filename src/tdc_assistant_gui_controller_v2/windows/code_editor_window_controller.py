@@ -51,4 +51,4 @@ class CodeEditorWindowController:
         sleep(0.5)
 
         keyboard.send_keys("{VK_END}")
-        keyboard.send_keys(transform_text(text))
+        keyboard.send_keys(transform_text(text), pause=0.0)
