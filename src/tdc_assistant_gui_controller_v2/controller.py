@@ -59,3 +59,6 @@ class TdcAssistantGuiControllerV2:
 
     def scrape_screenshare(self) -> Optional[Screenshare]:
         return self._window_manager.scrape_screenshare()
+
+    def is_screenshare_window_open(self) -> bool:
+        return self._window_manager.is_screenshare_window_open()

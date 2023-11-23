@@ -26,7 +26,6 @@ class ScreenshareWindowController:
         self._logger = Logger(self)
 
     def scrape(self) -> Screenshare:
-        print("scraping")
         start = self._logger.log(f"Started screenshare image capture")
         self._window.set_focus()
         sleep(0.5)

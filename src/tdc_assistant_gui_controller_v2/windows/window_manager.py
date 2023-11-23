@@ -174,3 +174,6 @@ class WindowManager:
             return None
 
         return controller.scrape()
+
+    def is_screenshare_window_open(self) -> bool:
+        return self.find_screenshare_window_controller() is not None
