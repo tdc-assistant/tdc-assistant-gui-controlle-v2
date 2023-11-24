@@ -45,6 +45,8 @@ class PublicChatWindowController:
 
     def scrape(self) -> PublicChat:
         start = self._logger.log("Started scraping public chat")
+        self._window.maximize()
+        sleep(0.5)
         self._window.set_focus()
         sleep(0.5)
         self._window.maximize()
