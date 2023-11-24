@@ -4,7 +4,6 @@ from .public_chat import PublicChat
 from .types import Coordinate
 from .send_message import Message, send_message
 from .insert_code_editor import insert_code_editor
-from .scrape_editors import ScrapeEditorConfig
 from .windows import WindowManager
 from .code_editor import CodeEditor
 from .types import AWSCredentials, Screenshare
@@ -25,7 +24,6 @@ class ComponentCoordinates(TypedDict):
 class ControllerOptions(TypedDict):
     tutor_profile: TutorProfile
     coords: ComponentCoordinates
-    scraped_editor_config: ScrapeEditorConfig
     aws_credentials: AWSCredentials
 
 
