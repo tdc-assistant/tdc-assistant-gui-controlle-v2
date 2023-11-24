@@ -7,6 +7,7 @@ from .insert_code_editor import insert_code_editor
 from .windows import WindowManager
 from .code_editor import CodeEditor
 from .types import AWSCredentials, Screenshare
+from .word_processor import WordProcessor
 
 
 class TutorProfile(TypedDict):
@@ -67,3 +68,6 @@ class TdcAssistantGuiControllerV2:
         self._window_manager.send_text_to_code_editor(
             editor_language, editor_number, text
         )
+
+    def scrape_word_processors(self) -> list[WordProcessor]:
+        return self._window_manager.scrape_word_processors()

@@ -1,6 +1,7 @@
 from typing import Any, Union, Optional
 
 from tdc_assistant_gui_controller_v2.code_editor.types.code_editor import CodeEditor
+from tdc_assistant_gui_controller_v2.word_processor.word_processor import WordProcessor
 
 from ..logger import Logger
 from ..types import Coordinate, AWSCredentials, Screenshare
@@ -10,12 +11,16 @@ from .open_all_windows import open_all_windows
 from .public_chat_window_controller import PublicChatWindowController
 from .code_editor_window_controller import CodeEditorWindowController
 from .screenshare_window_controller import ScreenshareWindowController
-
+from .code_editor_window_controller import CodeEditorWindowController
+from .word_processor_window_controller import WordProcessorWindowController
 
 from ..types import WindowTitle
 
 WindowController = Union[
-    PublicChatWindowController, CodeEditorWindowController, ScreenshareWindowController
+    PublicChatWindowController,
+    CodeEditorWindowController,
+    ScreenshareWindowController,
+    WordProcessorWindowController,
 ]
 
 code_editor_window_titles = [
@@ -66,7 +71,6 @@ class WindowManager:
             controller = self._map_window_to_controller(window)
 
             if controller is not None:
-                print(controller.get_window_title())
                 for existing_controller in self._window_controllers:
                     if (
                         existing_controller.get_window_title()
@@ -93,6 +97,9 @@ class WindowManager:
         )
         return programming_language, editor_number
 
+    def _parse_word_processor_number(self, window_title: str) -> int:
+        return int(window_title[len("word processor") :].split()[0].strip())
+
     def _map_window_to_controller(self, window: Any) -> Optional[WindowController]:
         window_text = window.window_text()
         if WindowTitle.PUBLIC_CHAT.value.lower() in window_text.lower():
@@ -110,6 +117,11 @@ class WindowManager:
                 )
         if WindowTitle.SCREENSHARE.value.lower() in window_text.lower():
             return ScreenshareWindowController(window, self._aws_credentials)
+        if WindowTitle.WORD_PROCESSOR.value.lower() in window_text.lower():
+            return WordProcessorWindowController(
+                window,
+                number=self._parse_word_processor_number(window_text.lower().strip()),
+            )
         return None
 
     def find_public_chat_window_controller(
@@ -145,6 +157,16 @@ class WindowManager:
                     editor_language == controller._programming_language
                     and editor_number == controller._editor_number
                 ):
+                    return controller
+
+        return None
+
+    def find_window_processor_window_controller(self, number: int):
+        self.open_all_windows()
+
+        for controller in self._window_controllers:
+            if isinstance(controller, WordProcessorWindowController):
+                if controller._number == number:
                     return controller
 
         return None
@@ -209,3 +231,14 @@ class WindowManager:
             return None
 
         optional_controller.send_text(text)
+
+    def scrape_word_processors(self) -> list[WordProcessor]:
+        self.open_all_windows()
+
+        word_processors: list[WordProcessor] = []
+
+        for controller in self._window_controllers:
+            if isinstance(controller, WordProcessorWindowController):
+                word_processors.append(controller.scrape())
+
+        return word_processors
