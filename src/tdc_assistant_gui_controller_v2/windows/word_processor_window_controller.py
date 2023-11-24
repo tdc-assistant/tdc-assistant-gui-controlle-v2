@@ -24,6 +24,8 @@ class WordProcessorWindowController:
         start = self._logger.log(f"Started scraping Word Processor '{self._number}'")
         self._window.set_focus()
         sleep(0.5)
+        self._window.maximize()
+        sleep(0.5)
         content = scrape_code_editor_content(self._window)
         end = self._logger.log(f"Finished scraping Word Processor '{self._number}'")
         self._logger.log_elapsed_time(start, end)

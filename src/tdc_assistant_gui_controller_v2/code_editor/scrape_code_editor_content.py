@@ -9,9 +9,13 @@ from .types import CodeEditor
 
 def scrape_code_editor_content(window: Any) -> str:
     window.set_focus()
-    mouse.move(coords=(100, 100))
     sleep(0.5)
-    mouse.click(coords=(100, 100))
+    window.maximize()
+    sleep(0.5)
+
+    mouse.move(coords=(750, 750))
+    sleep(0.5)
+    mouse.click(coords=(750, 750))
     sleep(0.5)
 
     clipboard.EmptyClipboard()
