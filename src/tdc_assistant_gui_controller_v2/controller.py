@@ -4,10 +4,10 @@ from .public_chat import PublicChat
 from .types import Coordinate
 from .send_message import Message, send_message
 from .insert_code_editor import insert_code_editor
-from .scrape_editors import ScrapeEditorConfig
 from .windows import WindowManager
 from .code_editor import CodeEditor
 from .types import AWSCredentials, Screenshare
+from .word_processor import WordProcessor
 
 
 class TutorProfile(TypedDict):
@@ -25,7 +25,6 @@ class ComponentCoordinates(TypedDict):
 class ControllerOptions(TypedDict):
     tutor_profile: TutorProfile
     coords: ComponentCoordinates
-    scraped_editor_config: ScrapeEditorConfig
     aws_credentials: AWSCredentials
 
 
@@ -69,3 +68,6 @@ class TdcAssistantGuiControllerV2:
         self._window_manager.send_text_to_code_editor(
             editor_language, editor_number, text
         )
+
+    def scrape_word_processors(self) -> list[WordProcessor]:
+        return self._window_manager.scrape_word_processors()
