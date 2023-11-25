@@ -5,6 +5,7 @@ from time import sleep
 
 from pywinauto import mouse, keyboard  # type: ignore
 
+from .win32_window_manager import Win32WindowManager
 
 from ..public_chat import PublicChat
 from ..public_chat.scrape_public_chat import scrape_public_chat
@@ -45,10 +46,12 @@ class PublicChatWindowController:
 
     def scrape(self) -> PublicChat:
         start = self._logger.log("Started scraping public chat")
-        self._window.set_focus()
+
+        w = Win32WindowManager()
+        w.find_window_wildcard(self._window.window_text())
+        w.set_foreground()
         sleep(0.5)
-        self._window.maximize()
-        sleep(0.5)
+
         result = scrape_public_chat(
             self._window, self._tutor_first_name, self._tutor_last_initial
         )
@@ -60,7 +63,10 @@ class PublicChatWindowController:
         return self._window.window_text()
 
     def send_message(self, message: str, coords=[int, int]) -> None:
-        self._window.maximize()
+        w = Win32WindowManager()
+        w.find_window_wildcard(self._window.window_text())
+        w.set_foreground()
+        sleep(0.5)
         mouse.move(coords=coords)
         sleep(0.5)
         mouse.click(coords=coords)
