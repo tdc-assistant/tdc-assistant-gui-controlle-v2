@@ -42,6 +42,4 @@ def scrape_public_chat(
         tutor_last_initial,
     )
 
-    public_chat_window.close()
-
     return {"messages": messages, "raw_text": raw_text}
