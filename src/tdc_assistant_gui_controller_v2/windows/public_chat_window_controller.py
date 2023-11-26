@@ -48,9 +48,12 @@ class PublicChatWindowController:
         start = self._logger.log("Started scraping public chat")
 
         w = Win32WindowManager()
-        w.find_window_wildcard(self._window.window_text())
+        w.find_window_wildcard(f".*{self._window.window_text()}.*")
         w.set_foreground()
-        sleep(0.5)
+        sleep(2)
+
+        self._window.set_focus()
+        sleep(2)
 
         result = scrape_public_chat(
             self._window, self._tutor_first_name, self._tutor_last_initial
@@ -64,9 +67,12 @@ class PublicChatWindowController:
 
     def send_message(self, message: str, coords=[int, int]) -> None:
         w = Win32WindowManager()
-        w.find_window_wildcard(self._window.window_text())
+        w.find_window_wildcard(f".*{self._window.window_text()}.*")
         w.set_foreground()
-        sleep(0.5)
+        sleep(2)
+        self._window.set_focus()
+        sleep(2)
+        self._window.maximize()
         mouse.move(coords=coords)
         sleep(0.5)
         mouse.click(coords=coords)
