@@ -78,3 +78,6 @@ class PublicChatWindowController:
         mouse.click(coords=coords)
         sleep(0.5)
         keyboard.send_keys(_transform_text(message))
+
+    def maximize_window(self):
+        self._window.maximize()

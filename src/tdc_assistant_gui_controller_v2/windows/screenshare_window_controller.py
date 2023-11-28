@@ -50,3 +50,6 @@ class ScreenshareWindowController:
 
     def get_window_title(self) -> str:
         return self._window.window_text()
+
+    def maximize_window(self):
+        self._window.maximize()
