@@ -78,6 +78,7 @@ class WindowManager:
                     ):
                         break
                 else:
+                    controller.maximize_window()
                     self._window_controllers.append(controller)
             else:
                 self._logger.log_warning(
