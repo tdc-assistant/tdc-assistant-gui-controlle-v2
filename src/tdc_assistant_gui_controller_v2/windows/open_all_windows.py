@@ -3,12 +3,19 @@ from typing import Any
 from ..types import Coordinate
 
 from .get_all_windows import get_all_windows
+from .get_first_window import get_first_window
+from ..types import WindowTitle
 from .open_window import open_window
 
-MAX_TRIES = 3
+MAX_TRIES = 2
 
 
 def open_all_windows(right_pop_out_button_coords: Coordinate) -> list[Any]:
+    optional_classroom_window = get_first_window(WindowTitle.CLASSROOM)
+
+    if optional_classroom_window is not None:
+        optional_classroom_window.set_focus()
+
     prev_windows = get_all_windows()
     prev_num_windows = len(prev_windows)
     curr_windows = []
