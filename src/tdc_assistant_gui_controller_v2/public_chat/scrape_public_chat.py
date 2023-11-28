@@ -26,7 +26,7 @@ def scrape_public_chat_raw_text(control: Any) -> str:
     if result is None:
         raise Exception(ERR_MSG_CONTROL_NOT_FOUND)
 
-    return result
+    return result.strip()
 
 
 def scrape_public_chat(
