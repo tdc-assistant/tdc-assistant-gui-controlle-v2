@@ -1,11 +1,11 @@
 originals_and_replacements = {
     "`": "",
-    "\n": "{VK_RETURN}",
+    "\n": "{VK_RETURN}^{BACKSPACE}",
 }
 
 
 def transform_text(text: str):
-    transformed_text = ""
+    transformed_text = "\n\n// Adam added this:\n"
     for ch in text:
         if ch in "{}()":
             transformed_text += "{" + ch + "}"
