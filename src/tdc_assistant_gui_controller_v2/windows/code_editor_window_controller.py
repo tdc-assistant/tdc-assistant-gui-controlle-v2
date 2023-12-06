@@ -50,7 +50,7 @@ class CodeEditorWindowController:
         self._window.maximize()
         sleep(0.5)
 
-        keyboard.send_keys("{VK_END}")
+        keyboard.send_keys("^{VK_END}")
         keyboard.send_keys(transform_text(text), pause=0.0)
 
     def maximize_window(self):
