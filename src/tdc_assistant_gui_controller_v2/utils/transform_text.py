@@ -1,5 +1,8 @@
-originals_and_replacements = {
+originals_and_replacements_before = {
     "`": "",
+}
+
+originals_and_replacements_after = {
     "\n": "{VK_RETURN}{VK_LSHIFT HOME}{VK_LSHIFT HOME}{BACKSPACE}",
 }
 
@@ -12,7 +15,12 @@ def transform_text(text: str):
         else:
             transformed_text += ch
 
-    for original, replacement in originals_and_replacements.items():
+    for original, replacement in originals_and_replacements_before.items():
         transformed_text = transformed_text.replace(original, replacement)
 
-    return "{VK_SPACE}".join(transformed_text.split()) + "{VK_RETURN}"
+    transformed_text = "{VK_SPACE}".join(transformed_text.split()) + "{VK_RETURN}"
+
+    for original, replacement in originals_and_replacements_after.items():
+        transformed_text = transformed_text.replace(original, replacement)
+
+    return transform_text
