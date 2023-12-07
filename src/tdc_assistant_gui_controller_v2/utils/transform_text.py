@@ -1,6 +1,6 @@
 originals_and_replacements = {
     "`": "",
-    "\n": "{VK_RETURN}^{BACKSPACE}",
+    "\n": "{VK_RETURN}{VK_SHIFT HOME}{VK_SHIFT HOME}{BACKSPACE}",
 }
 
 
