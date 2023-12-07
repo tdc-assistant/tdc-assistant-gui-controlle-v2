@@ -1,5 +1,9 @@
 from typing import Any, Union, Optional
 
+from time import sleep
+
+from pywinauto import mouse  # type: ignore
+
 from tdc_assistant_gui_controller_v2.code_editor.types.code_editor import CodeEditor
 from tdc_assistant_gui_controller_v2.word_processor.word_processor import WordProcessor
 
@@ -15,6 +19,7 @@ from .code_editor_window_controller import CodeEditorWindowController
 from .word_processor_window_controller import WordProcessorWindowController
 
 from ..types import WindowTitle
+from .get_first_window import get_first_window
 
 WindowController = Union[
     PublicChatWindowController,
@@ -43,6 +48,8 @@ code_editor_window_titles = [
 class WindowManager:
     _right_pop_out_button_coords: Coordinate
     _public_chat_text_box_coords: Coordinate
+    _end_session_button_coords: Coordinate
+    _confirm_end_session_button_coords: Coordinate
     _tutor_first_name: str
     _tutor_last_initial: str
     _aws_credentials: AWSCredentials
@@ -54,12 +61,16 @@ class WindowManager:
         aws_credentials: AWSCredentials,
         right_pop_out_button_coords: Coordinate,
         public_chat_text_box_coords: Coordinate,
+        end_session_button_coords: Coordinate,
+        confirm_end_session_button_coords: Coordinate,
         tutor_first_name: str,
         tutor_last_initial: str,
     ):
         self._aws_credentials = aws_credentials
         self._right_pop_out_button_coords = right_pop_out_button_coords
         self._public_chat_text_box_coords = public_chat_text_box_coords
+        self._end_session_button_coords = end_session_button_coords
+        self._confirm_end_session_button_coords = confirm_end_session_button_coords
         self._tutor_first_name = tutor_first_name
         self._tutor_last_initial = tutor_last_initial
         self._window_controllers = []
@@ -243,3 +254,43 @@ class WindowManager:
                 word_processors.append(controller.scrape())
 
         return word_processors
+
+    def end_session(self) -> None:
+        optional_classroom_window = get_first_window(WindowTitle.CLASSROOM)
+
+        if optional_classroom_window is not None:
+            optional_classroom_window.set_focus()
+
+        mouse.move(
+            coords=(
+                self._end_session_button_coords["x"],
+                self._end_session_button_coords["y"],
+            )
+        )
+
+        sleep(1)
+
+        mouse.click(
+            coords=(
+                self._end_session_button_coords["x"],
+                self._end_session_button_coords["y"],
+            )
+        )
+
+        sleep(1)
+
+        mouse.move(
+            coords=(
+                self._confirm_end_session_button_coords["x"],
+                self._confirm_end_session_button_coords["y"],
+            )
+        )
+
+        sleep(1)
+
+        mouse.click(
+            coords=(
+                self._confirm_end_session_button_coords["x"],
+                self._confirm_end_session_button_coords["y"],
+            )
+        )

@@ -20,6 +20,8 @@ class ComponentCoordinates(TypedDict):
     public_chat_pop_out: Coordinate
     insert_code_editor_coord_path: tuple[Coordinate, Coordinate, Coordinate, Coordinate]
     public_chat_button_coords: Coordinate
+    end_session_button_coords: Coordinate
+    confirm_end_session_button_coords: Coordinate
 
 
 class ControllerOptions(TypedDict):
@@ -42,6 +44,10 @@ class TdcAssistantGuiControllerV2:
             tutor_first_name=self._options["tutor_profile"]["first_name"],
             tutor_last_initial=self._options["tutor_profile"]["last_initial"],
             aws_credentials=self._options["aws_credentials"],
+            end_session_button_coords=options["coords"]["end_session_button_coords"],
+            confirm_end_session_button_coords=options["coords"][
+                "confirm_end_session_button_coords"
+            ],
         )
 
     def scrape_public_chat(self) -> PublicChat:
@@ -71,3 +77,6 @@ class TdcAssistantGuiControllerV2:
 
     def scrape_word_processors(self) -> list[WordProcessor]:
         return self._window_manager.scrape_word_processors()
+
+    def end_session(self) -> None:
+        pass
