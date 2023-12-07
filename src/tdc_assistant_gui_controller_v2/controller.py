@@ -79,4 +79,4 @@ class TdcAssistantGuiControllerV2:
         return self._window_manager.scrape_word_processors()
 
     def end_session(self) -> None:
-        pass
+        return self._window_manager.end_session()
