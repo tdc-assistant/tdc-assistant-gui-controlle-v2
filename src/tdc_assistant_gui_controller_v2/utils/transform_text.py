@@ -23,4 +23,4 @@ def transform_text(text: str):
     for original, replacement in originals_and_replacements_after.items():
         transformed_text = transformed_text.replace(original, replacement)
 
-    return transform_text
+    return transformed_text
