@@ -8,7 +8,7 @@ originals_and_replacements_after = {
 def transform_text(text: str):
     transformed_text = "\n\n// Adam added this:\n"
     for ch in text:
-        if ch in "{}()+_%":
+        if ch in "{}()+_%^~":
             transformed_text += "{" + ch + "}"
         else:
             transformed_text += ch
