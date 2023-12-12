@@ -3,6 +3,7 @@ from pywinauto import Desktop  # type: ignore
 
 from ..types import WindowTitle
 
+from .window_exception import WindowException
 
 default_window_titles: Final[list[WindowTitle]] = [
     WindowTitle.CLASSROOM,
@@ -36,7 +37,11 @@ def get_all_windows(window_titles: list[WindowTitle] = default_window_titles):
 
     for w in windows:
         for t in window_titles:
-            if t.value.lower() in w.window_text().lower():
+            try:
+                window_text = w.window_text()
+            except:
+                raise WindowException()
+            if t.value.lower() in window_text.lower():
                 result.append(w)
                 break
 

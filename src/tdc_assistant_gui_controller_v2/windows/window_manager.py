@@ -5,6 +5,7 @@ from time import sleep
 from pywinauto import mouse  # type: ignore
 
 from tdc_assistant_gui_controller_v2.code_editor.types.code_editor import CodeEditor
+from tdc_assistant_gui_controller_v2.windows.window_exception import WindowException
 from tdc_assistant_gui_controller_v2.word_processor.word_processor import WordProcessor
 
 from ..logger import Logger
@@ -113,7 +114,10 @@ class WindowManager:
         return int(window_title[len("word processor") :].split()[0].strip())
 
     def _map_window_to_controller(self, window: Any) -> Optional[WindowController]:
-        window_text = window.window_text()
+        try:
+            window_text = window.window_text()
+        except:
+            raise WindowException()
         if WindowTitle.PUBLIC_CHAT.value.lower() in window_text.lower():
             return PublicChatWindowController(
                 window, self._tutor_first_name, self._tutor_last_initial
