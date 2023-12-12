@@ -38,3 +38,9 @@ class WindowWrapper:
             return self._window.get_properties()
         except:
             raise WindowException()
+
+    def descendants(self) -> Any:
+        try:
+            return self._window.descendants()
+        except:
+            raise WindowException()
