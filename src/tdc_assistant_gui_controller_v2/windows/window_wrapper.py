@@ -32,3 +32,9 @@ class WindowWrapper:
             return self._window.capture_as_image()
         except:
             raise WindowException()
+
+    def get_properties(self) -> Any:
+        try:
+            return self._window.get_properties()
+        except:
+            raise WindowException()
