@@ -5,6 +5,7 @@ from time import sleep
 
 from pywinauto import mouse, keyboard  # type: ignore
 
+from .window_wrapper import WindowWrapper
 from .win32_window_manager import Win32WindowManager
 
 from ..public_chat import PublicChat
@@ -33,13 +34,13 @@ def _transform_text(text: str):
 
 
 class PublicChatWindowController:
-    _window: Any
+    _window: WindowWrapper
     _tutor_first_name: str
     _tutor_last_initial: str
     _logger: Logger
 
     def __init__(self, window: Any, tutor_first_name: str, tutor_last_initial: str):
-        self._window = window
+        self._window = WindowWrapper(window)
         self._tutor_first_name = tutor_first_name
         self._tutor_last_initial = tutor_last_initial
         self._logger = Logger(self)

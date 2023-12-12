@@ -1,5 +1,7 @@
 from typing import Any
 
+from tdc_assistant_gui_controller_v2.windows.window_exception import WindowException
+
 from ..types import Coordinate
 
 from .get_all_windows import get_all_windows
@@ -14,7 +16,10 @@ def open_all_windows(right_pop_out_button_coords: Coordinate) -> list[Any]:
     optional_classroom_window = get_first_window(WindowTitle.CLASSROOM)
 
     if optional_classroom_window is not None:
-        optional_classroom_window.set_focus()
+        try:
+            optional_classroom_window.set_focus()
+        except:
+            raise WindowException()
 
     prev_windows = get_all_windows()
     prev_num_windows = len(prev_windows)

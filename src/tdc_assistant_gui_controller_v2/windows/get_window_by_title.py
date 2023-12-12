@@ -2,6 +2,8 @@ from time import sleep
 
 from pywinauto import mouse  # type: ignore
 
+from .window_exception import WindowException
+
 from .get_all_windows import get_all_windows
 
 from ..controls import ControlPropertyKey
@@ -32,7 +34,11 @@ def get_window_by_title(
 
         for w in get_all_windows():
             # TODO Check title to ensure robustness .. another window could open while this is happening
-            texts = w.get_properties().get(ControlPropertyKey.TEXTS.value)
+            try:
+                props = w.get_properties()
+            except:
+                raise WindowException()
+            texts = props.get(ControlPropertyKey.TEXTS.value)
 
             if len(texts) == 0:
                 continue

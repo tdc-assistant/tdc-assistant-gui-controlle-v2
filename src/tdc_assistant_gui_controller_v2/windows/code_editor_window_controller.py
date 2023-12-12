@@ -8,15 +8,17 @@ from ..logger import Logger
 from ..code_editor import scrape_code_editor_content, CodeEditor
 from ..utils import transform_text
 
+from .window_wrapper import WindowWrapper
+
 
 class CodeEditorWindowController:
-    _window: Any
+    _window: WindowWrapper
     _programming_language: str
     _editor_number: int
     _logger: Logger
 
     def __init__(self, window: Any, programming_language: str, editor_number: int):
-        self._window = window
+        self._window = WindowWrapper(window)
         self._programming_language = programming_language
         self._editor_number = editor_number
         self._logger = Logger(self)

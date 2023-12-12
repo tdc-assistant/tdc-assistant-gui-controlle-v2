@@ -10,18 +10,20 @@ import boto3
 from ..logger import Logger
 from ..types import AWSCredentials, Screenshare
 
+from .window_wrapper import WindowWrapper
+
 FILENAME = "image_capture"
 FILETYPE = "png"
 FILEPATH = join(dirname(__file__), "code-snippet-screenshot.png")
 
 
 class ScreenshareWindowController:
-    _window: Any
+    _window: WindowWrapper
     _logger: Logger
     _aws_credentials: AWSCredentials
 
     def __init__(self, window: Any, aws_credentials: AWSCredentials):
-        self._window = window
+        self._window = WindowWrapper(window)
         self._aws_credentials = aws_credentials
         self._logger = Logger(self)
 

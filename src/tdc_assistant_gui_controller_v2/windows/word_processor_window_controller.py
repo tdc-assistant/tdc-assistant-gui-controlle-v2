@@ -9,6 +9,8 @@ from ..code_editor import scrape_code_editor_content
 from ..word_processor import WordProcessor
 from ..utils import transform_text
 
+from .window_wrapper import WindowWrapper
+
 
 class WordProcessorWindowController:
     _window: Any
@@ -16,7 +18,7 @@ class WordProcessorWindowController:
     _logger: Logger
 
     def __init__(self, window: Any, number: int):
-        self._window = window
+        self._window = WindowWrapper(window)
         self._number = number
         self._logger = Logger(self)
 
